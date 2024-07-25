@@ -217,7 +217,7 @@ export default {
       :total="total">
     </el-pagination>
 
-    <!--    添加用户对话框
+    <!--    添加用户对话
 visible.sync控制对话框是否显示标记-->
 
     <el-dialog title="添加用户" :visible.sync="addEmpFormVisible">

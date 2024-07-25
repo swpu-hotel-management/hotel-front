@@ -10,7 +10,7 @@
           <el-input prefix-icon="el-icon-s-custom" placeholder="请输入用户名" v-model="username"></el-input>
         </el-form-item>
         <el-form-item >
-          <el-input placeholder="请输入密码" prefix-icon="el-icon-setting" v-model:value="password" show-password></el-input>
+          <el-input placeholder="请输入密码" prefix-icon="el-icon-setting" v-model:value="password" show-password ></el-input>
         </el-form-item>
 
         <el-form-item >
@@ -20,7 +20,7 @@
         </el-form-item>
         <el-form-item>
 <!--          v-on:触发事件简写成@click事件名称，login事件处理-->
-          <el-button type="primary" icon="el-icon-right" style="width: 100%" v-on:click="login" >登录</el-button>
+          <el-button type="primary" icon="el-icon-right" style="width: 100%" v-on:click="login" @keyup.enter="keyDown(e)">登录</el-button>
         </el-form-item>
         <el-form-item>
           <el-button style="width: 100%"  v-on:click="register">注册</el-button>
@@ -74,6 +74,12 @@ export default {
           console.log(e)
         })
     },
+    keyDown(e) {
+      // 回车则执行登录方法 enter键的ASCII是13
+      if (e.keyCode == 13) {
+        this.login();
+      }
+    },
     register() {
 
       this.$message.warning('请联系管理员')
@@ -92,7 +98,13 @@ export default {
   },
   mounted() {
     this.getVocde()
-  }
+    // 绑定监听事件
+    window.addEventListener("keydown", this.keyDown);
+  },
+  destroyed() {
+    // 销毁事件
+    window.removeEventListener("keydown", this.keyDown, false);
+  },
 
 }
 

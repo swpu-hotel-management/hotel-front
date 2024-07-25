@@ -73,7 +73,7 @@ router是否使用vue-router的模式，使用该模式会在激活导航时以i
       <el-menu
       default-active="2"
       class="el-menu-vertical-demo"
-      background-color="#545c64"
+      background-color="#345c64"
       text-color="#fff"
       active-text-color="#ffd04b"
       router>
@@ -124,7 +124,7 @@ router是否使用vue-router的模式，使用该模式会在激活导航时以i
     <el-container>
       <el-header>
         <div>
-          <span>用户权限管理系统</span>
+          <span>酒店管理系统</span>
         </div>
         <div>
           <el-menu default-active="1" class="el-menu-demo" mode="horizontal" background-color="#B3C0D1" text-color="#4a90e2">
@@ -161,7 +161,7 @@ router是否使用vue-router的模式，使用该模式会在激活导航时以i
 }
 
 .el-aside {
-  background-color: #545c64;
+  background-color: #345c64;
   color: #333;
   text-align: center;
   line-height: 200px;

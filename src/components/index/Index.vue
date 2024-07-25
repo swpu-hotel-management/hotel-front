@@ -100,7 +100,10 @@ router是否使用vue-router的模式，使用该模式会在激活导航时以i
             <span>入住管理</span>
           </template>
           <el-menu-item-group >
-            <el-menu-item index="/sys/check_in" >入住列表</el-menu-item>
+            <el-menu-item index="/sys/check_in" >入住登记</el-menu-item>
+          </el-menu-item-group>
+          <el-menu-item-group>
+            <el-menu-item index="/sys/checkList" >登记管理</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
         <el-submenu index="/sys" >

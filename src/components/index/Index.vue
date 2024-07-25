@@ -123,9 +123,9 @@ router是否使用vue-router的模式，使用该模式会在激活导航时以i
           <span>用户权限管理系统</span>
         </div>
         <div>
-          <el-menu default-active="1" class="el-menu-demo" mode="horizontal" background-color="#B3C0D1">
+          <el-menu default-active="1" class="el-menu-demo" mode="horizontal" background-color="#B3C0D1" text-color="#4a90e2">
             <el-submenu index="1">
-              <template slot="title">{{username }}
+              <template slot="title" >{{username }}
                 <img :src="imgUrl" style="width: 30px;height: 30px;border-radius: 50%;margin-right: 10px">
               </template>
 

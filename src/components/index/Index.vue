@@ -62,6 +62,10 @@ export default {
   <div class="index-container">
   <el-container >
     <el-aside width="200px">
+      <div style="width: 200px; height: 100px">
+        <img src="../../assets/logo.png" style="width: 50px;height: 50px"/>
+
+      </div>
       <!--    default-active="2"默认激活那个菜单
 text-color字体颜色
 active-text-color被激活的菜单字体颜色

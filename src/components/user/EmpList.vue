@@ -23,7 +23,16 @@ export default {
       addEmp:{imgUrl:''},
       addEmpFormVisible:false,
       updateEmp:{imgUrl:''},
-      updateEmpFormVisible:false
+      updateEmpFormVisible:false,
+
+      addEmpRules: {
+        username: [
+          { required: true, message: '请输入用户名', trigger: 'blur' }
+        ],
+        password: [
+          { required: true, message: '请输入初始密码', trigger: 'blur' }
+        ]
+      },
 
     }
   },
@@ -71,21 +80,33 @@ export default {
     },
     //添加用户对象保存按钮
     saveEmp(){
-      this.$axios.post('/emp/add', this.addEmp)
-        .then(res=>{
-          var data=res.data
-          if(data.code==200){
-            this.$message.success(data.msg)
-            this.getEmpList()
-            this.addEmpFormVisible = false
-            this.addEmp = {imgUrl:''}
-          }
+      this.$refs.addEmpForm.validate((valid) => {
+        if (valid) {
+          // 如果验证通过，则执行保存操作
+          // 例如发送数据到后端
+          console.log('数据有效，可以提交');
 
-          else{this.$message.warning(data.msg)}
-        })
-        .catch(e=>{
-          console.log(e)
-        })
+          this.$axios.post('/emp/add', this.addEmp)
+            .then(res=>{
+              var data=res.data
+              if(data.code==200){
+                this.$message.success(data.msg)
+                this.getEmpList()
+                this.addEmpFormVisible = false
+                this.addEmp = {imgUrl:''}
+              }
+
+              else{this.$message.warning(data.msg)}
+            })
+            .catch(e=>{
+              console.log(e)
+            })
+        } else {
+          console.log('验证失败');
+          return false;
+        }
+      });
+
     },
     cancelUptateEmp(){
 
@@ -221,7 +242,7 @@ export default {
 visible.sync控制对话框是否显示记-->
 
     <el-dialog title="添加用户" :visible.sync="addEmpFormVisible">
-      <el-form :model="addEmp">
+      <el-form :model="addEmp" ref="addEmpForm" :rules="addEmpRules">
         <el-form-item label="姓名" label-width=120px >
           <el-input v-model="addEmp.name" autocomplete="off"></el-input>
         </el-form-item>
@@ -229,10 +250,11 @@ visible.sync控制对话框是否显示记-->
           <el-input v-model="addEmp.idNum" autocomplete="off"></el-input>
         </el-form-item>
 
-        <el-form-item label="用户名" label-width=120px >
-          <el-input v-model="addEmp.username" autocomplete="off"></el-input>
+
+        <el-form-item label="用户名" label-width=120px  prop="username">
+          <el-input v-model="addEmp.username" autocomplete="off" ></el-input>
         </el-form-item>
-        <el-form-item label="初始密码" label-width=120px>
+        <el-form-item label="初始密码" label-width=120px  prop="password">
           <el-input v-model="addEmp.password" autocomplete="off" show-password></el-input>
         </el-form-item>
         <el-form-item label="年龄" label-width=120px>

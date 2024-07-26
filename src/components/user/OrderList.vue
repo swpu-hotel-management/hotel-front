@@ -56,16 +56,19 @@
         <el-table-column label="订单编号" width="240" align="center">
           <template slot-scope="scope">{{ scope.row.orderNum }}</template>
         </el-table-column>
-        <el-table-column label="房间号" width="160" align="center">
+        <el-table-column label="房间号" width="120" align="center">
           <template slot-scope="scope">{{ scope.row.roomId }}</template>
         </el-table-column>
-        <el-table-column label="提交时间" width="240" align="center">
+        <el-table-column label="订单金额" width="120" align="center">
+          <template slot-scope="scope">¥{{ scope.row.price }}</template>
+        </el-table-column>
+        <el-table-column label="提交时间" width="200" align="center">
           <template slot-scope="scope">{{ scope.row.createTime }}</template>
         </el-table-column>
         <el-table-column label="客户名" width="160" align="center">
           <template slot-scope="scope">{{ scope.row.clientName }}</template>
         </el-table-column>
-        <el-table-column label="操作" width="200" align="center">
+        <el-table-column label="操作" width="160" align="center">
           <template slot-scope="scope">
             <el-button
               size="small"

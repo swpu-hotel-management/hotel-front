@@ -49,6 +49,13 @@
     <el-card class="operate-container" shadow="never">
       <i class="el-icon-tickets"></i>
       <span>数据列表</span>
+      <el-button
+        style="float: right; margin-right: 15px;"
+        type="primary"
+        @click="openAddModal"
+        size="small">
+        增加
+      </el-button>
     </el-card>
     <div class="table-container">
       <el-table ref="roomTable"
@@ -58,30 +65,63 @@
                 v-loading="listLoading" border>
         <el-table-column type="selection" width="60" align="center"></el-table-column>
         <el-table-column label="房间号" width="80" align="center">
-          <template slot-scope="scope">{{scope.row.roomNum}}</template>
+          <template slot-scope="scope">
+            <el-input v-if="scope.row.editing" v-model="scope.row.roomNum" class="input-width"></el-input>
+            <span v-else>{{ scope.row.roomNum }}</span>
+          </template>
         </el-table-column>
         <el-table-column label="类型" width="160" align="center">
-          <template slot-scope="scope">{{ scope.row.type }}</template>
+          <template slot-scope="scope">
+            <el-input v-if="scope.row.editing" v-model="scope.row.type" class="input-width"></el-input>
+            <span v-else>{{ scope.row.type }}</span>
+          </template>
         </el-table-column>
         <el-table-column label="价格" width="160" align="center">
-          <template slot-scope="scope">{{ scope.row.price }}</template>
+          <template slot-scope="scope">
+            <el-input v-if="scope.row.editing" v-model.number="scope.row.price" class="input-width"></el-input>
+            <span v-else>{{ scope.row.price }}</span>
+          </template>
         </el-table-column>
         <el-table-column label="描述" width="240" align="center">
-          <template slot-scope="scope">{{ scope.row.description }}</template>
+          <template slot-scope="scope">
+            <el-input v-if="scope.row.editing" v-model="scope.row.description" class="input-width"></el-input>
+            <span v-else>{{ scope.row.description }}</span>
+          </template>
         </el-table-column>
         <el-table-column label="状态" width="160" align="center">
           <template slot-scope="scope">
-            <el-tag :type="getStatusType(scope.row.status)">
-              {{ getStatusLabel(scope.row.status) }}
-            </el-tag>
+            <el-select v-if="scope.row.editing" v-model="scope.row.status" class="input-width" placeholder="请选择房间状态">
+              <el-option
+                v-for="item in roomStatuses"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+            <span v-else>
+              <el-tag :type="getStatusType(scope.row.status)">
+                {{ getStatusLabel(scope.row.status) }}
+              </el-tag>
+            </span>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="200" align="center">
           <template slot-scope="scope">
             <el-button
+              v-if="!scope.row.editing"
               size="small"
-              @click="editRoom(scope.row)"
-              type="success">编辑</el-button>
+              @click="toggleEdit(scope.row)"
+              type="success">更新</el-button>
+            <el-button
+              v-else
+              size="small"
+              @click="saveChanges(scope.row)"
+              type="success">保存</el-button>
+            <el-button
+              v-if="scope.row.editing"
+              size="small"
+              @click="cancelEdit(scope.row)"
+              type="info">取消</el-button>
             <el-button
               size="small"
               @click="showDeleteConfirmation(scope.row.roomNum)"
@@ -99,6 +139,43 @@
       layout="total, sizes, prev, pager, next, jumper"
       :total="total">
     </el-pagination>
+    <el-dialog title="新增房间" :visible.sync="addModalVisible" width="50%">
+      <el-form :model="newRoom" label-width="100px">
+        <el-form-item label="房间号">
+          <el-input v-model="newRoom.roomNum"></el-input>
+        </el-form-item>
+        <el-form-item label="类型">
+          <el-select v-model="newRoom.type" placeholder="请选择房间类型">
+            <el-option
+              v-for="item in roomTypes"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="价格">
+          <el-input v-model.number="newRoom.price"></el-input>
+        </el-form-item>
+        <el-form-item label="描述">
+          <el-input v-model="newRoom.description"></el-input>
+        </el-form-item>
+        <el-form-item label="状态">
+          <el-select v-model="newRoom.status" placeholder="请选择房间状态">
+            <el-option
+              v-for="item in roomStatuses"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="addModalVisible = false">取消</el-button>
+        <el-button type="primary" @click="addRoom">保存</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -123,7 +200,15 @@ export default {
         { value: 2, label: '占用', type: 'info' },
         { value: -1, label: '清扫', type: 'warning' }
       ],
-      listLoading: false
+      listLoading: false,
+      addModalVisible: false,
+      newRoom: {
+        roomNum: '',
+        type: '',
+        price: null,
+        description: '',
+        status: ''
+      }
     };
   },
   methods: {
@@ -137,7 +222,7 @@ export default {
         }
       })
         .then(res => {
-          this.roomList = res.data;
+          this.roomList = res.data.map(room => ({ ...room, editing: false }));
           this.total = this.roomList.length;
           this.listLoading = false;
           console.log('Loaded room list:', this.roomList); // 添加调试输出
@@ -188,9 +273,71 @@ export default {
           this.$message.error('删除时发生错误');
         });
     },
-    editRoom(room) {
-      // 实现编辑房间的功能
-      console.log(`Editing room ${room.roomNum}`);
+    toggleEdit(room) {
+      room.editing = !room.editing;
+    },
+    saveChanges(room) {
+      this.$confirm('是否保存更新？', '提示', { type: 'warning' })
+        .then(() => {
+          this.updateRoom(room)
+            .then(() => {
+              room.editing = false;
+            });
+        })
+        .catch(() => {
+          // 用户取消了保存操作
+          room.editing = false;
+        });
+    },
+    cancelEdit(room) {
+      room.editing = false;
+    },
+    updateRoom(room) {
+      return new Promise((resolve, reject) => {
+        // 显示正在更新的房间号，以帮助调试
+        console.log('Updating room:', room);
+
+        // 发送 PUT 请求
+        this.$axios.put('/room/update', room)
+          .then(res => {
+            const data = res.data;
+            if (data) {
+              resolve();
+            } else {
+              reject(new Error('更新失败'));
+            }
+          })
+          .catch(e => {
+            reject(e);
+          });
+      });
+    },
+    openAddModal() {
+      this.newRoom = {
+        roomNum: '',
+        type: '',
+        price: null,
+        description: '',
+        status: ''
+      };
+      this.addModalVisible = true;
+    },
+    addRoom() {
+      this.$axios.post('/room/add', this.newRoom)
+        .then(res => {
+          const data = res.data;
+          if (data) {
+            this.$message.success('新增成功');
+            this.searchRooms(); // 刷新页面
+            this.addModalVisible = false; // 关闭模态框
+          } else {
+            this.$message.warning('新增失败');
+          }
+        })
+        .catch(e => {
+          console.log(e);
+          this.$message.error('新增时发生错误');
+        });
     },
     getStatusType(status) {
       const found = this.roomStatuses.find(s => s.value === status);

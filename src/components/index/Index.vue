@@ -62,6 +62,10 @@ export default {
   <div class="index-container">
   <el-container >
     <el-aside width="200px">
+      <div style="width: 200px; height: 100px">
+        <img src="../../assets/logo.png" style="width: 50px;height: 50px"/>
+
+      </div>
       <!--    default-active="2"默认激活那个菜单
 text-color字体颜色
 active-text-color被激活的菜单字体颜色
@@ -69,11 +73,11 @@ router是否使用vue-router的模式，使用该模式会在激活导航时以i
       <el-menu
       default-active="2"
       class="el-menu-vertical-demo"
-      background-color="#545c64"
+      background-color="#345c64"
       text-color="#fff"
       active-text-color="#ffd04b"
       router>
-      <el-submenu index="/sys" >
+      <el-submenu index="/emp" >
         <template slot="title">
           <i class="el-icon-location"></i>
 <!--          {{}}在文本区域插入变量-->
@@ -83,7 +87,7 @@ router是否使用vue-router的模式，使用该模式会在激活导航时以i
           <el-menu-item index="/sys/empList" >员工列表</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
-        <el-submenu index="/sys" >
+        <el-submenu index="/room" >
           <template slot="title">
             <i class="el-icon-location"></i>
             <!--          {{}}在文本区域插入变量-->
@@ -93,20 +97,17 @@ router是否使用vue-router的模式，使用该模式会在激活导航时以i
             <el-menu-item index="/sys/roomList" >房间列表</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
-        <el-submenu index="/sys" >
+        <el-submenu index="/check_in" >
           <template slot="title">
             <i class="el-icon-location"></i>
             <!--          {{}}在文本区域插入变量-->
             <span>入住管理</span>
           </template>
           <el-menu-item-group >
-            <el-menu-item index="/sys/check_in" >入住登记</el-menu-item>
-          </el-menu-item-group>
-          <el-menu-item-group>
-            <el-menu-item index="/sys/checkList" >登记管理</el-menu-item>
+            <el-menu-item index="/sys/check_in" >入住列表</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
-        <el-submenu index="/sys" >
+        <el-submenu index="/orderList" >
           <template slot="title">
             <i class="el-icon-location"></i>
             <!--          {{}}在文本区域插入变量-->
@@ -123,12 +124,12 @@ router是否使用vue-router的模式，使用该模式会在激活导航时以i
     <el-container>
       <el-header>
         <div>
-          <span>用户权限管理系统</span>
+          <span>酒店管理系统</span>
         </div>
         <div>
-          <el-menu default-active="1" class="el-menu-demo" mode="horizontal" background-color="#B3C0D1">
+          <el-menu default-active="1" class="el-menu-demo" mode="horizontal" background-color="#B3C0D1" text-color="#4a90e2">
             <el-submenu index="1">
-              <template slot="title">{{username }}
+              <template slot="title" >{{username }}
                 <img :src="imgUrl" style="width: 30px;height: 30px;border-radius: 50%;margin-right: 10px">
               </template>
 
@@ -160,7 +161,7 @@ router是否使用vue-router的模式，使用该模式会在激活导航时以i
 }
 
 .el-aside {
-  background-color: #545c64;
+  background-color: #345c64;
   color: #333;
   text-align: center;
   line-height: 200px;

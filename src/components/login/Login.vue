@@ -3,14 +3,14 @@
 
 
     <el-card class="box-card" shadow="hover">
-      <h1>用户管理系统</h1>
+      <h1>酒店管理系统</h1>
       <el-form>
         <el-form-item >
 <!--          v-model双向绑定一般在输入框上-->
           <el-input prefix-icon="el-icon-s-custom" placeholder="请输入用户名" v-model="username"></el-input>
         </el-form-item>
         <el-form-item >
-          <el-input placeholder="请输入密码" prefix-icon="el-icon-setting" v-model:value="password" show-password></el-input>
+          <el-input placeholder="请输入密码" prefix-icon="el-icon-setting" v-model:value="password" show-password ></el-input>
         </el-form-item>
 
         <el-form-item >
@@ -20,10 +20,7 @@
         </el-form-item>
         <el-form-item>
 <!--          v-on:触发事件简写成@click事件名称，login事件处理-->
-          <el-button type="primary" icon="el-icon-right" style="width: 100%" v-on:click="login" >登录</el-button>
-        </el-form-item>
-        <el-form-item>
-          <el-button style="width: 100%"  v-on:click="register">注册</el-button>
+          <el-button type="primary" icon="el-icon-right" style="width: 100%" v-on:click="login" @keyup.enter="keyDown(e)">登录</el-button>
         </el-form-item>
         <el-button type="text" @click="remember">忘记密码</el-button>
       </el-form>
@@ -74,9 +71,11 @@ export default {
           console.log(e)
         })
     },
-    register() {
-
-      this.$message.warning('请联系管理员')
+    keyDown(e) {
+      // 回车则执行登录方法 enter键的ASCII是13
+      if (e.keyCode == 13) {
+        this.login();
+      }
     },
     remember(){
       this.$message.warning('请联系管理员')
@@ -92,7 +91,13 @@ export default {
   },
   mounted() {
     this.getVocde()
-  }
+    // 绑定监听事件
+    window.addEventListener("keydown", this.keyDown);
+  },
+  destroyed() {
+    // 销毁事件
+    window.removeEventListener("keydown", this.keyDown, false);
+  },
 
 }
 
@@ -101,6 +106,7 @@ export default {
 /* 类选择器 */
 .box-card {
   width: 25vw;
+  opacity: 0.9;
 }
 .login-container {
   display: flex;
@@ -110,10 +116,10 @@ export default {
 vw浏览器宽度的1/100*/
   height: 100vh;
   background-image: url('../../assets/login.jpg');
+  background-size: 100% 100%;
 }
 h1{
-
-  color: #409EFF;
+  color:rgb(255, 0, 0);
 
   text-align: center;
 }

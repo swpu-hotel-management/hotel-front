@@ -214,13 +214,20 @@ export default {
   methods: {
     searchRooms() {
       this.listLoading = true;
-      this.$axios.get('/room/list', {
-        params: {
-          roomNumber: this.roomNumber,
-          type: this.roomType,
-          status: this.roomStatus
-        }
-      })
+      let params = {}; // 默认为空，表示获取所有房间
+
+      // 如果有搜索条件，则添加到参数中
+      if (this.roomNumber) {
+        params.roomNumber = this.roomNumber;
+      }
+      if (this.roomType) {
+        params.type = this.roomType;
+      }
+      if (this.roomStatus) {
+        params.status = this.roomStatus;
+      }
+
+      this.$axios.get('/room/list', { params })
         .then(res => {
           this.roomList = res.data.map(room => ({ ...room, editing: false }));
           this.total = this.roomList.length;

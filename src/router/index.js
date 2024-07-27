@@ -4,10 +4,10 @@ import Router from 'vue-router'
 import Login from '@/components/login/Login'
 import index from '@/components/index/Index'
 import EmpList  from "@/components/user/EmpList.vue";
-import OrderList from "@/components/user/OrderList.vue";
+import OrderList from "@/components/user/order/OrderList.vue";
 import RoomList from "@/components/user/RoomList.vue";
-import Check_in from "@/components/user/Check_in.vue";
-import CheckList from "@/components/user/CheckList.vue"
+import check_in from "@/components/user/Check_in.vue";
+import orderStatis from "@/components/user/order/OrderStatis.vue"
 Vue.use(Router)
 
 export default new Router({
@@ -30,9 +30,9 @@ export default new Router({
 
         {path:'roomList',name:'RoomList',component:RoomList},
 
-        {path:'check_in',name:'Check_in',component:Check_in},
+        {path:'check_in',name:'Check_in',component:check_in},
 
-        {path:'checkList',name:'CheckList',component:CheckList},
+        {path:'orderStatis',name:'OrderStatis',component:orderStatis}
       ]
     },
 

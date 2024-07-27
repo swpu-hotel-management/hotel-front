@@ -13,16 +13,16 @@ export default {
         label: '女'
       },{
         value: '',
-        label: '不限男女'
+        label: '不限'
       }],
       sex:'',
       name:'',
       pageSize:5,
       total:0,
       pageNumber:1,
-      addEmp:{imgUrl:''},
+      addEmp:{},
       addEmpFormVisible:false,
-      updateEmp:{imgUrl:''},
+      updateEmp:{},
       updateEmpFormVisible:false,
 
       empRules: {
@@ -34,12 +34,29 @@ export default {
         ],
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' }
+        ],
+        age: [
+          { validator: this.validateAge, trigger: 'blur' }
+        ],
+        position:[
+          {required: true, message: '请输入密码', trigger: 'blur' }
         ]
       },
+      roles:[],
 
     }
   },
   methods: {
+    getRoles(){
+      this.$axios.get('/role/getRoleName')
+        .then(res => {
+          this.roles = res.data.data
+        })
+        .catch(e=>{
+          console.log(e)
+        })
+    },
+
     getEmpList() {
 
       var params = {
@@ -67,6 +84,13 @@ export default {
       this.sex=''
       this.age=''
       this.getEmpList()
+    },
+    validateAge(rule, value, callback) {
+      if (value < 0 || value > 100) {
+        callback(new Error('年龄必须在0到100之间'));
+      } else {
+        callback();
+      }
     },
     handleSizeChange(val) {
       //将修改后的page赋值给this.pageSize
@@ -104,7 +128,7 @@ export default {
                 this.$message.success(data.msg)
                 this.getEmpList()
                 this.addEmpFormVisible = false
-                this.addEmp = {imgUrl:''}
+                this.addEmp = {}
               }
 
               else{this.$message.warning(data.msg)}
@@ -184,6 +208,7 @@ export default {
   },
   mounted() {
     this.getEmpList()
+    this.getRoles()
   }
 
 }
@@ -207,7 +232,7 @@ export default {
 
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="reset">重置条件</el-button>
+        <el-button  @click="reset">重置</el-button>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="getEmpList()">查询</el-button>
@@ -242,7 +267,7 @@ export default {
           <img :src="scope.row.imgUrl" alt="" style="width: 50px;height: 50px"/>
         </template>
       </el-table-column>
-      <el-table-column fixed="right" label="操作">
+      <el-table-column fixed="right" label="操作" width="150">
         <template slot-scope="scope">
           <el-button type="primary" size="small" @click="showUpdateEmpDialog(scope.row)">修改</el-button>
           <el-button type="danger" size="small" @click="deleteEmp(scope.row.id)">删除</el-button>
@@ -253,7 +278,7 @@ export default {
     <!--分页组件
     @size-change每页显示条数 改变时会触发
     currentPage 页码改变时会触发-->
-    <el-pagination
+    <el-paginatio
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="pageNumber"
@@ -261,7 +286,7 @@ export default {
       :page-size="pageSize"
       layout="total, sizes, prev, pager, next, jumper"
       :total="total">
-    </el-pagination>
+    </el-paginatio>
 
     <!--    添加用户-->
 
@@ -281,7 +306,7 @@ export default {
         <el-form-item label="初始密码" label-width=120px  prop="password">
           <el-input v-model="addEmp.password" autocomplete="off" show-password></el-input>
         </el-form-item>
-        <el-form-item label="年龄" label-width=120px>
+        <el-form-item label="年龄" label-width=120px prop="age">
           <el-input v-model="addEmp.age" ></el-input>
         </el-form-item>
         <el-form-item label="性别" label-width=120px>
@@ -293,8 +318,11 @@ export default {
         <el-form-item label="电话" label-width=120px>
           <el-input v-model="addEmp.phone" ></el-input>
         </el-form-item>
-        <el-form-item label="职位" label-width=120px>
-          <el-input v-model="addEmp.position" ></el-input>
+        <el-form-item label="职位" label-width=120px prop="position">
+          <el-select v-model="addEmp.position" placeholder="请选择">
+            <el-option v-for="role in roles" :key="role" :value="role">{{ role }}</el-option>
+
+          </el-select>
         </el-form-item>
         <el-form-item label="头像" label-width="120px">
           <!--            头像上传组件-->
@@ -340,11 +368,13 @@ export default {
             <el-option label="女" value="女"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="年龄" label-width=120px>
+        <el-form-item label="年龄" label-width=120px prop="age">
           <el-input v-model="updateEmp.age" ></el-input>
         </el-form-item>
         <el-form-item label="职位" label-width=120px>
-          <el-input v-model="updateEmp.position" ></el-input>
+          <el-select v-model="updateEmp.position" placeholder="请选择">
+            <el-option v-for="role in roles" :key="role" :value="role">{{ role }}</el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="头像" label-width="120px">
           <el-upload

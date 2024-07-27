@@ -139,9 +139,9 @@
 
 <style scoped>
     .app-container {
-        margin-top: 40px;
-        margin-left: 120px;
-        margin-right: 120px;
+        width: 100%;
+        height: 50%;
+        margin: 0 auto;
     }
     .total-frame {
         display: flex;
@@ -155,11 +155,6 @@
         text-align: center;
     }
 
-    .total-icon {
-        color: #409EFF;
-        width: 60px;
-        height: 60px;
-    }
     .total-title {
     position: relative;
     font-size: 16px;
@@ -173,10 +168,6 @@
     bottom: -15px;
   }
 
-  .un-handle-layout {
-    margin-top: 20px;
-    border: 1px solid #DCDFE6;
-  }
 
   .layout-title {
     color: #606266;
@@ -185,46 +176,9 @@
     font-weight: bold;
   }
 
-  .un-handle-content {
-    padding: 20px 40px;
-  }
-
-  .un-handle-item {
-    border-bottom: 1px solid #EBEEF5;
-    padding: 10px;
-  }
-
-  .overview-layout {
-    margin-top: 20px;
-  }
-
-  .overview-item-value {
-    font-size: 24px;
-    text-align: center;
-  }
-
-  .overview-item-title {
-    margin-top: 10px;
-    text-align: center;
-  }
-
-  .out-border {
-    border: 1px solid #DCDFE6;
-  }
-
   .statistics-layout {
     margin-top: 20px;
     border: 1px solid #DCDFE6;
   }
-  .mine-layout {
-    position: absolute;
-    right: 140px;
-    top: 107px;
-    width: 250px;
-    height: 235px;
-  }
-  .address-content{
-    padding: 20px;
-    font-size: 18px
-  }
+
 </style>

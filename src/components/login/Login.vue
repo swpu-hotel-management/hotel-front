@@ -22,7 +22,7 @@
 <!--          v-on:触发事件简写成@click事件名称，login事件处理-->
           <el-button type="primary" icon="el-icon-right" style="width: 100%" v-on:click="login" @keyup.enter="keyDown(e)">登录</el-button>
         </el-form-item>
-        <el-button type="text" @click="remember">忘记密码</el-button>
+
       </el-form>
     </el-card>
 
@@ -77,9 +77,7 @@ export default {
         this.login();
       }
     },
-    remember(){
-      this.$message.warning('请联系管理员')
-    },
+
     getVocde(){
       this.$axios.get('emp/vcode')
         .then(result=>{

@@ -73,13 +73,13 @@
             <el-button
             size="small"
             @click="deleteOrder(scope.row.id)"
-            type="primary">删除订单</el-button>
+            type="danger">删除订单</el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
     <div class="batch-operate-container">
-      <el-button type="primary" @click="handleDeleteIds">批量删除</el-button>
+      <el-button type="danger" @click="handleDeleteIds">批量删除</el-button>
     </div>
     <el-pagination
       @size-change="handleSizeChange"
@@ -91,7 +91,7 @@
       :total="total">
     </el-pagination>
   </div>
-  
+
 </template>
 <script>
 

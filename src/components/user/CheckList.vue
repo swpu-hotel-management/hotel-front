@@ -79,25 +79,31 @@
         this.addTimeFormVisible=false;
       },
       saveAddTime(){
-        var params={};
-        params.hours=this.hours;
-        params.id = this.id;
-        this.$axios.get('form/addTime',{params:params})
-          .then(res=>{
-            var data = res.data;
-            if(data.code==200){
-              this.$message.success(data.msg);
-              this.addTimeFormVisible=false;
-              this.getFormList();
-            }else {
-              this.$message.error("出错了");
-            }
-          })
-          .catch(e=>{
-            console.log(e)
-          })
-
-      }
+        this.$confirm("确定为客人续住？","提示",{
+          confirmButtonText:"确定",
+          cancelButtonText:"取消",
+          type:"warning"
+        })
+        .then(()=>{
+          var params={};
+          params.hours=this.hours;
+          params.id = this.id;
+          this.$axios.get('form/addTime',{params:params})
+            .then(res=>{
+              var data = res.data;
+              if(data.code==200){
+                this.$message.success(data.msg);
+                this.addTimeFormVisible=false;
+                this.getFormList();
+              }else {
+                this.$message.error("出错了");
+              }
+            })
+            .catch(e=>{
+              console.log(e)
+            })
+        })
+      },
     },
     mounted() {
       this.getFormList();
@@ -183,7 +189,9 @@
         sortable
       >
         <template slot-scope="scope">
-          {{scope.row.status===1?"已退房":"未退房"}}
+          <el-tag
+            :type="scope.row.status === 1 ? 'success' : 'danger'"
+            disable-transitions>{{scope.row.status===1?"已退房":"未退房"}}</el-tag>
         </template>
       </el-table-column>
       <el-table-column
@@ -230,6 +238,6 @@
   </div>
 </template>
 
-<style scoped>
+<style>
 
 </style>

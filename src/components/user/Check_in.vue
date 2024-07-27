@@ -167,7 +167,8 @@ export default {
       border
       style="width: 100%"
       max-height="600"
-      :default-sort = "{prop: 'id', order: 'ascending'}">
+      :default-sort = "{prop: 'id', order: 'ascending'}"
+    >
       <el-table-column
         fixed
         prop="id"
@@ -198,7 +199,10 @@ export default {
         label="状态"
       >
         <template slot-scope="scope">
-          {{ scope.row.status === 1 ? "空闲" : scope.row.status === 2 ? "使用" : "清扫" }}
+          <el-tag
+            :type="scope.row.status === 1 ? 'success' : scope.row.status===2?'danger' : 'warning'"
+            disable-transitions>{{ scope.row.status === 1 ? "空闲" : scope.row.status === 2 ? "使用" : "清扫" }}
+          </el-tag>
         </template>
       </el-table-column>
       <el-table-column

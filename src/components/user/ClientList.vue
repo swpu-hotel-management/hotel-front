@@ -118,7 +118,7 @@
         <el-input v-model="address" placeholder="地址"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="setNull">重置</el-button>
+        <el-button  @click="setNull">重置</el-button>
         <el-button  type="primary" @click="getClientList">查询</el-button>
       </el-form-item>
     </el-form>

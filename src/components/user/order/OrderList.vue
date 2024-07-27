@@ -4,13 +4,13 @@
       <div>
         <span>筛选搜索</span>
         <el-button
-          style="float: right;"
-          type="primary"
-          @click="getOrderList"
-          size="small">
-          查询搜索
-        </el-button>
-        <el-button
+        style="float: right;"
+        type="primary"
+        @click="getOrderList"
+        size="small">
+        查询搜索
+      </el-button>
+      <el-button
           style="float:right;margin-right: 15px"
           @click="handleResetSearch()"
           size="small">
@@ -71,9 +71,9 @@
         <el-table-column label="操作" width="160" align="center">
           <template slot-scope="scope">
             <el-button
-              size="small"
-              @click="deleteOrder(scope.row.id)"
-              type="primary">删除订单</el-button>
+            size="small"
+            @click="deleteOrder(scope.row.id)"
+            type="primary">删除订单</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -91,98 +91,98 @@
       :total="total">
     </el-pagination>
   </div>
-
+  
 </template>
 <script>
 
-export default {
-  data(){
-    return{
-      orderList:[],
-      page:1,
-      pageSize:10,
-      total:0,
-      id:'',
-      orderNum:'',
-      multipleSelection: [],
-      clientName:'',
-      createTime:null
-    }
-  },
-  methods:{
-    getOrderList(){
-      var params={
-        page:this.page,
-        pageSize:this.pageSize,
-        orderNum:this.orderNum,
-        clientName:this.clientName,
-        createTime:this.createTime
+  export default {
+    data(){
+      return{
+        orderList:[],
+        page:1,
+        pageSize:10,
+        total:0,
+        id:'',
+        orderNum:'',
+        multipleSelection: [],
+        clientName:'',
+        createTime:null
       }
-      if(this.orderNum != ''){
-        params.orderNum = this.orderNum;
-      }
-      if(this.clientName != ''){
-        params.clientName = this.clientName;
-      }
-      if(this.createTime != null){
-        console.log(this.createTime);
-        params.createTime = this.createTime;
-      }
-      this.$axios.get('/order/page',{params:params})
+    },
+    methods:{
+      getOrderList(){
+        var params={
+          page:this.page,
+          pageSize:this.pageSize,
+          orderNum:this.orderNum,
+          clientName:this.clientName,
+          createTime:this.createTime
+        }
+        if(this.orderNum != ''){
+          params.orderNum = this.orderNum;
+        }
+        if(this.clientName != ''){
+          params.clientName = this.clientName;
+        }
+        if(this.createTime != null){
+          console.log(this.createTime);
+          params.createTime = this.createTime;
+        }
+        this.$axios.get('/order/page',{params:params})
         .then(res => {
           this.orderList = res.data.data.rows;
           this.total = res.data.data.total;
         })
-    },
-    handleResetSearch(){
-      this.page=1;
-      this.pageSize=10;
-      this.orderNum='';
-      this.clientName='';
-      this.createTime=null;
-      this.getOrderList();
-    },
-    handleSizeChange(val){
-      this.pageSize = val;
-      this.getOrderList();
-    },
-    handleCurrentChange(val){
-      this.page = val;
-      this.getOrderList();
-    },
-    handleSelectionChange(val){
-      this.multipleSelection = val;
-    },
-    handleDeleteIds(){
-      let ids=[];
-      for(let i = 0;i < this.multipleSelection.length;i++){
-        ids.push(this.multipleSelection[i].id);
-      }
-      this.deleteOrder(ids);
-    },
-    deleteOrder(ids){
-      const idsToSend = Array.isArray(ids) ? ids : [ids];
-      console.log(idsToSend)
-      this.$confirm('此操作将永久删除该订单，是否继续？','提示',{type:'warning'})
+      },
+      handleResetSearch(){
+        this.page=1;
+        this.pageSize=10;
+        this.orderNum='';
+        this.clientName='';
+        this.createTime=null;
+        this.getOrderList();
+      },
+      handleSizeChange(val){
+        this.pageSize = val;
+        this.getOrderList();
+      },
+      handleCurrentChange(val){
+        this.page = val;
+        this.getOrderList();
+      },
+      handleSelectionChange(val){
+        this.multipleSelection = val;
+      },
+      handleDeleteIds(){
+        let ids=[];
+        for(let i = 0;i < this.multipleSelection.length;i++){
+          ids.push(this.multipleSelection[i].id);
+        }
+        this.deleteOrder(ids);
+      },
+      deleteOrder(ids){
+        const idsToSend = Array.isArray(ids) ? ids : [ids];
+        console.log(idsToSend)
+        this.$confirm('此操作将永久删除该订单，是否继续？','提示',{type:'warning'})
         .then(() =>{
           this.$axios.post('/order/delete',{"ids":idsToSend})
-            .then(res => {
-              var data = res.data;
-              if(data.code == 200){
-                this.$message.success(data.msg);
-                this.getOrderList();
-              }else{
-                this.$message.warning(data.msg);
-              }
-            })
-            .catch(e=>{
-              console.log(e);
-            })
+          .then(res => {
+            var data = res.data;
+            if(data.code == 200){
+              this.$message.success(data.msg);
+              this.getOrderList();
+            }else{
+              this.$message.warning(data.msg);
+            }
+          })
+          .catch(e=>{
+            console.log(e);
+          })
         })
+      }
+    },
+    mounted(){
+      this.getOrderList();
     }
-  },
-  mounted(){
-    this.getOrderList();
   }
-}
 </script>

@@ -152,6 +152,9 @@ searchRooms() {
         }
       })
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> parent of 443dbd9 (Revert "完成高级查询中的根据房间号、类型查询")
       .catch(error => {
         console.error('Error fetching room by number:', error);
         this.$message.error('查询房间时发生错误');
@@ -168,10 +171,13 @@ searchRooms() {
         const rooms = res.data;
         if (rooms && rooms.length > 0) {
           this.roomList = rooms.map(room => ({ ...room, editing: false }));
+<<<<<<< HEAD
 =======
         .then(res => {
           this.roomList = res.data;
 >>>>>>> parent of 476f923 (曾、删、查、改完成，剩下高级查找)
+=======
+>>>>>>> parent of 443dbd9 (Revert "完成高级查询中的根据房间号、类型查询")
           this.total = this.roomList.length;
           this.listLoading = false;
           console.log('Loaded rooms by type:', this.roomList); // 添加调试输出

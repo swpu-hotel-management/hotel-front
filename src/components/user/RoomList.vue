@@ -191,9 +191,9 @@ export default {
       roomType: '',
       roomStatus: '',
       roomTypes: [
-        { value: '单人间', label: '单人间' },
-        { value: '双人间', label: '双人间' },
-        { value: '套房', label: '套房' }
+        { value: 'single', label: '单人间' },
+        { value: 'double', label: '双人间' },
+        { value: 'suite', label: '套房' }
       ],
       roomStatuses: [
         { value: 1, label: '可用', type: 'success' },
@@ -212,77 +212,33 @@ export default {
     };
   },
   methods: {
-searchRooms() {
-  this.listLoading = true;
+    searchRooms() {
+      this.listLoading = true;
+      let params = {}; // 默认为空，表示获取所有房间
 
-  if (this.roomNumber) {
-    // 如果提供了房间号，则尝试查询单个房间
-    this.$axios.get('/room/select', {
-      params: {
-        roomNum: this.roomNumber
+      // 如果有搜索条件，则添加到参数中
+      if (this.roomNumber) {
+        params.roomNumber = this.roomNumber;
       }
-    })
-      .then(res => {
-        const room = res.data;
-        if (room) {
-          this.roomList = [{ ...room, editing: false }];
-          this.total = 1;
-          this.listLoading = false;
-          console.log('Loaded room by number:', this.roomList[0]); // 添加调试输出
-        } else {
-          this.$message.warning('未找到指定的房间号！');
-          this.roomList = [];
-          this.total = 0;
-          this.listLoading = false;
-        }
-      })
-      .catch(error => {
-        console.error('Error fetching room by number:', error);
-        this.$message.error('查询房间时发生错误');
-        this.listLoading = false;
-      });
-  } else if (this.roomType) {
-    // 如果提供了房间类型，则尝试查询具有该类型的房间
-    this.$axios.get('/room/selectByType', {
-      params: {
-        type: this.roomType
+      if (this.roomType) {
+        params.type = this.roomType;
       }
-    })
-      .then(res => {
-        const rooms = res.data;
-        if (rooms && rooms.length > 0) {
-          this.roomList = rooms.map(room => ({ ...room, editing: false }));
+      if (this.roomStatus) {
+        params.status = this.roomStatus;
+      }
+
+      this.$axios.get('/room/list', { params })
+        .then(res => {
+          this.roomList = res.data.map(room => ({ ...room, editing: false }));
           this.total = this.roomList.length;
           this.listLoading = false;
-          console.log('Loaded rooms by type:', this.roomList); // 添加调试输出
-        } else {
-          this.$message.warning('未找到指定类型的房间！');
-          this.roomList = [];
-          this.total = 0;
+          console.log('Loaded room list:', this.roomList); // 添加调试输出
+        })
+        .catch(error => {
+          console.error('Error fetching rooms:', error);
           this.listLoading = false;
-        }
-      })
-      .catch(error => {
-        console.error('Error fetching rooms by type:', error);
-        this.$message.error('查询房间时发生错误');
-        this.listLoading = false;
-      });
-  } else {
-    // 如果没有提供房间号或类型，则获取所有房间
-    this.$axios.get('/room/list')
-      .then(res => {
-        this.roomList = res.data.map(room => ({ ...room, editing: false }));
-        this.total = this.roomList.length;
-        this.listLoading = false;
-        console.log('Loaded all rooms:', this.roomList); // 添加调试输出
-      })
-      .catch(error => {
-        console.error('Error fetching rooms:', error);
-        this.$message.error('获取房间列表时发生错误');
-        this.listLoading = false;
-      });
-  }
-},
+        });
+    },
     resetSearch() {
       this.page = 1;
       this.pageSize = 10;

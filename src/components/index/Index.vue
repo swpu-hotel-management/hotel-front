@@ -86,6 +86,9 @@ router是否使用vue-router的模式，使用该模式会在激活导航时以i
         <el-menu-item-group >
           <el-menu-item index="/sys/empList" >员工列表</el-menu-item>
         </el-menu-item-group>
+        <el-menu-item-group >
+          <el-menu-item index="/sys/position" >职位管理</el-menu-item>
+        </el-menu-item-group>
       </el-submenu>
         <el-submenu index="/room" >
           <template slot="title">
@@ -104,8 +107,10 @@ router是否使用vue-router的模式，使用该模式会在激活导航时以i
             <span>入住管理</span>
           </template>
           <el-menu-item-group >
-            <el-menu-item index="/sys/check_in" >入住列表</el-menu-item>
+            <el-menu-item index="/sys/check_in" >入住登记</el-menu-item>
           </el-menu-item-group>
+          <el-menu-item index="/sys/checkList">登记管理</el-menu-item>
+          <el-menu-item index="/sys/clientList">客人信息</el-menu-item>
         </el-submenu>
         <el-submenu index="/orderList" >
           <template slot="title">
@@ -115,6 +120,9 @@ router是否使用vue-router的模式，使用该模式会在激活导航时以i
           </template>
           <el-menu-item-group >
             <el-menu-item index="/sys/orderList" >订单列表</el-menu-item>
+          </el-menu-item-group>
+          <el-menu-item-group>
+            <el-menu-item index="/sys/orderStatis">订单统计</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
     </el-menu>

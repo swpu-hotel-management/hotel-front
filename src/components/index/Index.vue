@@ -3,7 +3,8 @@ export default {
   data() {
     return {
       username:'',
-      imgUrl:''
+      imgUrl:'',
+      show:'',
     }
 
   },
@@ -39,6 +40,22 @@ export default {
       .catch(()=>{
         this.$message.info('取消退出')
       })
+    },
+    showEmpmenu(){
+      var params={};
+      params.id = sessionStorage.getItem('userId');
+      this.$axios.get('/emp/showEmpmenu' ,{params:params})
+        .then(result=>{
+          var data=result.data
+          if(data.code==200){
+            this.show=data.data
+
+          }
+        })
+
+        .cat
+
+
     }
 
     },
@@ -46,6 +63,7 @@ export default {
 
 
     this.getUserInfo()
+    this.showEmpmenu()
 
   }
 }
@@ -77,7 +95,7 @@ router是否使用vue-router的模式，使用该模式会在激活导航时以i
       text-color="#fff"
       active-text-color="#ffd04b"
       router>
-      <el-submenu index="/emp" >
+      <el-submenu index="/emp" v-if="show" >
         <template slot="title">
           <i class="el-icon-location"></i>
 <!--          {{}}在文本区域插入变量-->
@@ -137,7 +155,7 @@ router是否使用vue-router的模式，使用该模式会在激活导航时以i
         <div>
           <el-menu default-active="1" class="el-menu-demo" mode="horizontal" background-color="#B3C0D1" text-color="#4a90e2">
             <el-submenu index="1">
-              <template slot="title" >{{username }}
+              <template slot="title" >你好，{{username }}
                 <img :src="imgUrl" style="width: 30px;height: 30px;border-radius: 50%;margin-right: 10px">
               </template>
 

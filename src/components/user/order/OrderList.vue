@@ -57,7 +57,7 @@
           <template slot-scope="scope">{{ scope.row.orderNum }}</template>
         </el-table-column>
         <el-table-column label="房间号" width="120" align="center">
-          <template slot-scope="scope">{{ scope.row.roomId }}</template>
+          <template slot-scope="scope">{{ scope.row.roomNum }}</template>
         </el-table-column>
         <el-table-column label="订单金额" width="120" align="center">
           <template slot-scope="scope">¥{{ scope.row.price }}</template>

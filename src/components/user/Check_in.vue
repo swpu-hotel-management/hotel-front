@@ -100,21 +100,30 @@ export default {
           if (data.code == 200) {
             this.$message.success(data.msg);
             this.cancelCheckIn();
-            // this.chickInFormVisible = false;
             this.getRoomList();
-            // this.checkForm = {};
-            // this.clients = [];
-            // this.client1 = {};
-            // this.client2 = {};
-            // this.client3 = {};
-            // this.client4 = {};
           } else {
             this.$message.error(data.msg);
           }
         })
         .catch(e => {
           console.log(e)
-        })
+        });
+      var params = {}
+      params.roomNum = this.checkForm.roomNum;
+      params.clientName = this.client1.name;
+      params.orderNum = this.generateOrderId();
+      this.$axios.post("/order/add",params)
+      .then(res => {
+        var data = res.data;
+        if (data.code == 200) {
+          this.$message.success(data.msg);
+        }else {
+          this.$message.error(data.msg);
+        }
+      })
+        .catch(e=>{
+          console.log(e)
+        });
     },
     setNull() {
       this.roomNum = '';
@@ -122,6 +131,11 @@ export default {
       this.status = '';
       this.getRoomList();
     },
+    generateOrderId() {
+      const timestamp = new Date().getTime();
+      const randomNum = Math.floor(Math.random() * 1000);
+      return `${timestamp}-${randomNum}`;
+    }
   },
   mounted() {
     this.getRoomList();
@@ -141,9 +155,7 @@ export default {
           <el-option label="无" value=""></el-option>
           <el-option label="单人间" value="单人间"></el-option>
           <el-option label="双人间" value="双人间"></el-option>
-          <el-option label="三人间" value="三人间"></el-option>
-          <el-option label="四人间" value="四人间"></el-option>
-          <el-option label="总统套房" value="总统套房"></el-option>
+          <el-option label="套房" value="套房"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="房间状态" label-width="100px">

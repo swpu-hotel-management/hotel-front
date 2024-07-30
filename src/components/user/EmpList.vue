@@ -278,7 +278,7 @@ export default {
     <!--分页组件
     @size-change每页显示条数 改变时会触发
     currentPage 页码改变时会触发-->
-    <el-paginatio
+    <el-pagination
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="pageNumber"
@@ -286,7 +286,7 @@ export default {
       :page-size="pageSize"
       layout="total, sizes, prev, pager, next, jumper"
       :total="total">
-    </el-paginatio>
+    </el-pagination>
 
     <!--    添加用户-->
 

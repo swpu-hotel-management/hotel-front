@@ -31,11 +31,11 @@ export default {
     handleSizeChange(val) {
       //将修改后的page赋值给this.pageSize
       this.pageSize = val
-      this.getUserList()
+      this.getPositionList()
     },
     handleCurrentChange(val) {
       this.pageNumber = val
-      this.getUserList()
+      this.getPositionList();
     },
     showAddRoleDialog(){
       //设置addUseerFormVisable为true
@@ -108,7 +108,7 @@ export default {
               var data=res.data
               if(data.code==200){
                 this.$message.success(data.data)
-                this.getUserList()
+                this.getPositionList()
               }
               else{
                 this.$message.warning(data.data)
